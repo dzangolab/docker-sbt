@@ -1,12 +1,14 @@
-FROM openjdk:8
+FROM openjdk:8-jdk-slim
 MAINTAINER dzangolab <info@dzangolab.com>
 
-ENV SBT_VERSION 0.13.15
+RUN apt-get update \
+    && apt-get install -y gnupg apt-transport-https
 
-RUN \
-  curl -L -o sbt-$SBT_VERSION.deb http://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
-  dpkg -i sbt-$SBT_VERSION.deb && \
-  rm sbt-$SBT_VERSION.deb && \
-  apt-get update && \
-  apt-get install sbt && \
-  sbt sbtVersion
+RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823 \
+    && apt-get update \
+    && apt-get install -y sbt \
+    && sbt sbtVersion
+    && apt-get clean autoclean \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
