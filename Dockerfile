@@ -2,7 +2,7 @@ FROM debian:9-slim
 MAINTAINER dzangolab <info@dzangolab.com>
 
 RUN apt-get update \
-    && apt-get install -y --force-yes --install-missing \
+    && apt-get install -y --force-yes --fix-missing \
       apt-transport-https \
       curl \
       gnupg \
